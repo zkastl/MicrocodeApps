@@ -1,0 +1,57 @@
+     1                                  ; guess.asm
+     2                                  ; Guess a number between 0 and 7
+     3                                  org 0x0100
+     4                                  start:
+     5 00000000 E440                        in al, (0x40)           ; Read the timer chip
+     6 00000002 2407                        and al, 0x07            ; Mask bits so the values is in the range 0-7
+     7 00000004 0430                        add al, 0x30            ; Convert to ASCII digit
+     8 00000006 88C1                        mov cl, al              ; Save AL into CL
+     9                                  game_loop:
+    10 00000008 B03F                        mov al, '?'            ; AL is now the '?' char
+    11 0000000A E81600                      call display_letter
+    12 0000000D E82700                      call read_keyboard      ; read keyboard
+    13 00000010 38C8                        cmp al, cl              ; compare read-in value to the generated one
+    14 00000012 75F4                        jne game_loop           ; no, start over
+    15 00000014 E80C00                      call display_letter     ; display number
+    16 00000017 B03A                        mov al, ':'            ; display happy face
+    17 00000019 E80700                      call display_letter
+    18 0000001C B029                        mov al, ')'
+    19 0000001E E80200                      call display_letter
+    20                                  
+    21                                  ; Save this Library as library1.asm
+    22 00000021 CD20                    int 0x20 ; Exit to command line
+    23                                  
+    24                                  ; display letter contained in AL (ASCII code, see appendix B)
+    25                                  display_letter:
+    26 00000023 50                          push ax
+    27 00000024 53                          push bx
+    28 00000025 51                          push cx
+    29 00000026 52                          push dx
+    30 00000027 56                          push si
+    31 00000028 57                          push di
+    32 00000029 B40E                        mov ah, 0x0e   ; Load AH with the code for terminal output
+    33 0000002B BB0F00                      mov bx, 0x000f ; Load BH page zero and BL color (graphic mode)
+    34 0000002E CD10                        int 0x10       ; Call BIOS to display one letter
+    35 00000030 5F                          pop di
+    36 00000031 5E                          pop si
+    37 00000032 5A                          pop dx
+    38 00000033 59                          pop cx
+    39 00000034 5B                          pop bx
+    40 00000035 58                          pop ax
+    41 00000036 C3                          ret            ; return to caller
+    42                                  
+    43                                      ; Read Keyboard into AL
+    44                                  read_keyboard:
+    45 00000037 53                          push bx
+    46 00000038 51                          push cx
+    47 00000039 52                          push dx
+    48 0000003A 56                          push si
+    49 0000003B 57                          push di
+    50 0000003C B400                        mov ah, 0x00    ; Load AH with code for keyboard read
+    51 0000003E CD16                        int 0x16        ; Call the BIOS for reading keyboard
+    52 00000040 5F                          pop di
+    53 00000041 5E                          pop si
+    54 00000042 5A                          pop dx
+    55 00000043 59                          pop cx
+    56 00000044 5B                          pop bx
+    57 00000045 C3                          ret             ; Returns to caller
