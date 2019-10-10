@@ -6,41 +6,44 @@ org 0x100
 board: equ 0x0300
 
 start:
-    mov bx, board   ; put the address of the game board into BX
-    mov cx, 9       ; count 9 squares
-    mov al, '1'     ; Move 0x31 '1' into AL
+    mov bx, board       ; put the address of the game board into BX
+    mov cx, 9           ; count 9 squares
+    mov al, '1'         ; Move 0x31 '1' into AL
 b09:
-    mov [bx], al    ; save it into the square (1 byte)
-    inc al          ; increase al, giving us the next digit
-    inc bx          ; increase direction
-    loop b09        ; decrement CX, jmp if non-zero
+    mov [bx], al        ; save it into the square (1 byte)
+    inc al              ; increase al, giving us the next digit
+    inc bx              ; increase direction
+    loop b09            ; decrement CX, jmp if non-zero
 
 b10:
     call show_board
-    call get_movement
-    mov byte [bx], 'X'
-    call show_board
-    call get_movement
-    mov byte [bx], '0'
+    call get_movement   ; Get Movement
+    mov byte [bx], 'X'  ; Put X into the square
+    call show_board     ; Show board
+    call get_movement   ; Get movement
+    mov byte [bx], '0'  ; put 0 into the square
     jmp b10
 
 get_movement:
     call read_keyboard
-    cmp al, 0x1b
-    je do_exit
-    sub al, 0x31
-    jc get_movement
-    cmp al, 0x09
-    jnc get_movement
-    cbw
-    mov bx, board
-    add bx, ax
-    mov al, [bx]
-    cmp al, 0x40
+    cmp al, 0x1b        ; Esc key pressed
+    je do_exit          ; Yes, exit
+    sub al, 0x31        ; Subtract code for ASCII '1'
+    jc get_movement     ; If it is less than? wait for another key
+    cmp al, 0x09        ; compare with 9
+    jnc get_movement    ; is it greater than or equal to? wait
+    cbw                 ; expand AL to 16 bits using AH
+    mov bx, board       ; BX points to board
+    add bx, ax          ; add the key entered
+    mov al, [bx]        ; get square content
+    cmp al, 0x40        ; compare with 0x40
+    jnc get_movement    ; is it greater than or equal to? Wait
+    call show_crlf      ; line change
+    ret                 ; return, now BX points to square
     
 
 do_exit:
-    int 0x20
+    int 0x20            ; exit to command line
 
 show_board:
     mov bx, board
