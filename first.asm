@@ -18,4 +18,4 @@ repeat:
 end:
     int 0x20 ; Exit to command line
 string:
-    db "Hello, World",0 ; Srring literal
+    db "Hello, World",0 ; String literal

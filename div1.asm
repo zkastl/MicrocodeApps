@@ -5,7 +5,6 @@ start:
     mov cl, 0x21
     div cl
     mov al, ah
-    ;
     add al, 0x30
     call display_letter
 
