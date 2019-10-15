@@ -41,6 +41,71 @@ get_movement:
     call show_crlf      ; line change
     ret                 ; return, now BX points to square
     
+find_line:
+    ; first horizontal row
+    mov al, [board]
+    cmp al, [board+1]
+    jne b01
+    cmp al, [board+2]
+    je won
+
+b01:
+    ;leftmost vertical row
+    cmp al, [board+3]
+    jne b04
+    cmp al, [board+6]
+    je won
+
+b04:
+    cmp al, [board+4]
+    jne b05
+    cmp al, [board+8]
+    je won
+
+b05:
+    mov al, [board+3]
+    cmp al, [board+4]
+    jne b02
+    cmp al, [board+5]
+    je won
+b02:
+    mov al, [board+6]
+    cmp al, [board+7]
+    jne b03
+    cmp al, [board+8]
+    je won
+b03:
+    mov al, [board+1]
+    cmp al, [board+4]
+    jne b06
+    cmp al, [board+7]
+    je won
+b06:
+    mov al, [board+2]
+    cmp al, [board+5]
+    jne b07
+    cmp al, [board+8]
+    je won
+b07:
+    cmp al, [board+4]
+    jne b08
+    cmp al, [board+6]
+    je won
+b08:
+    ret
+
+won:
+    call display_letter
+    mov al, 0x20
+    call display_letter
+    mov al, 0x77 ; 'w'
+    call display_letter
+    mov al, 0x69
+    call display_letter
+    mov al, 0x6e ; 'n'
+    call display_letter
+    mov al, 0x73
+    call display_letter
 
 do_exit:
     int 0x20            ; exit to command line
