@@ -17,9 +17,11 @@ b09:
 
 b10:
     call show_board
+    call find_line
     call get_movement   ; Get Movement
     mov byte [bx], 'X'  ; Put X into the square
     call show_board     ; Show board
+    call find_line
     call get_movement   ; Get movement
     mov byte [bx], '0'  ; put 0 into the square
     jmp b10
@@ -118,14 +120,13 @@ show_board:
     call show_row
     call show_div
     mov bx, board+6
-    jmp show_row
 
 show_row:
     call show_square
-    mov al, 0x7c
+    mov al, 0xb3
     call display_letter
     call show_square
-    mov al, 0x7c
+    mov al, 0xb3
     call display_letter
     call show_square
 
@@ -136,15 +137,15 @@ show_crlf:
     jmp display_letter
 
 show_div:
-    mov al, 0x2d
+    mov al, 0xc4
     call display_letter
-    mov al, 0x2b
+    mov al, 0xc5
     call display_letter
-    mov al, 0x2d
+    mov al, 0xc4
     call display_letter
-    mov al, 0x2b
+    mov al, 0xc5
     call display_letter
-    mov al, 0x2d
+    mov al, 0xc4
     call display_letter
     jmp show_crlf
 
@@ -153,26 +154,26 @@ show_square:
     inc bx
     jmp display_letter
 
-    ; Save this Library as library1.asm
+; Save this Library as library1.asm
 int 0x20 ; Exit to command line
 
 ; display letter contained in AL (ASCII code, see appendix B)
 display_letter:
-    push ax
     push bx
     push cx
     push dx
     push si
     push di
+    push ax
     mov ah, 0x0e   ; Load AH with the code for terminal output
     mov bx, 0x000f ; Load BH page zero and BL color (graphic mode)
     int 0x10       ; Call BIOS to display one letter
+    pop ax
     pop di
     pop si
     pop dx
     pop cx
     pop bx
-    pop ax
     ret            ; return to caller
 
     ; Read Keyboard into AL
