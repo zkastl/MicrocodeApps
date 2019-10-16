@@ -9,13 +9,13 @@ start:
     mov bx, board       ; put the address of the game board into BX
     mov cx, 9           ; count 9 squares
     mov al, '1'         ; Move 0x31 '1' into AL
-b09:
+init_board:
     mov [bx], al        ; save it into the square (1 byte)
     inc al              ; increase al, giving us the next digit
     inc bx              ; increase direction
-    loop b09            ; decrement CX, jmp if non-zero
+    loop init_board            ; decrement CX, jmp if non-zero
 
-b10:
+game_loop:
     call show_board
     call find_line
     call get_movement   ; Get Movement
@@ -24,7 +24,7 @@ b10:
     call find_line
     call get_movement   ; Get movement
     mov byte [bx], '0'  ; put 0 into the square
-    jmp b10
+    jmp game_loop
 
 get_movement:
     call read_keyboard
