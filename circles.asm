@@ -1,7 +1,7 @@
 ;
 ; Color circles
 ; 
-org 0x100
+org 0x0100
 
 mov ax, 0x0002      ; setup text 80x25 mode color
 int 0x10            ; call BIOS
