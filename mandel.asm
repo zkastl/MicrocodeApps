@@ -28,8 +28,7 @@
 ; /* Now use 'iteration' variable as color */
 
 cpu 8086            ; NASM warns us of non-8086 instructions
-
-org 0x0100          ; Start of code
+org 0x7C00         ; Start of code
 
 ; working in VGA 320x200x256 colors
 ; 
@@ -192,7 +191,7 @@ int 0x16
 mov ax, 0x0002
 int 0x10
 
-int 0x20
+jmp $
 
 ; calculate a squared number
 ; DX:AX = (DX:AX * DX:AX) / 256
@@ -253,3 +252,6 @@ adc dx, 0
 
 mul32_1:
 ret
+data:
+times 509-($-$$) db 0x21
+db 0x00,0x55,0xaa

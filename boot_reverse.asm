@@ -21,8 +21,7 @@ something:
     je end
     jmp something
 end:
-    0x0f04
-    ;jmp $                       ; Jump over itself ($ gives current address)
+    jmp $                       ; Jump over itself ($ gives current address)
 data:
     db "Hello, World!",0
     db "!dlroW ,olleH",0

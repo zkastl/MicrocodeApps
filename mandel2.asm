@@ -6,7 +6,7 @@
 
         cpu 8086        ; NASM warns us of non-8086 instructions
 
-        org 0x0100      ; Start of code
+        org 0x7c00      ; Start of code
 
         ;
         ; Working in VGA 320x200x256 colors
@@ -144,7 +144,8 @@ m3:     mov ax,[v_a]    ; Get Y-coordinate
         mov ax,0x0002   ; Set mode 80x25 text.
         int 0x10        ; Video interruption vector.
 
-        int 0x20        ; Exit to command-line.
+        ;int 0x20        ; Exit to command-line.
+        jmp $
 
         ;
         ; Calculate a squared number
@@ -243,3 +244,7 @@ mul32_3:
         adc dx,0
 mul32_1:
         ret             ; Return.
+
+data:
+        times 509-($-$$) db 0x21
+        db 0x00,0x55,0xaa
