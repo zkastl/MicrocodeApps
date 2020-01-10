@@ -74,7 +74,7 @@ call square32   ; get x^2
 push dx         ; save result to stack
 push ax
 mov ax, [v_y]   ; read y
-mov dx, [v_y+ + 2]
+mov dx, [v_y + 2]
 call square32   ; get y^2
 
 pop bx
@@ -235,7 +235,7 @@ mul bx
 add [v_s2 + 2], ax
 adc [v_s2 + 4], dx
 
-mov ax, [v_s1]
+mov ax, [v_s1+2]
 mul cx
 add [v_s2+2], ax
 adc [v_s2+4], dx
