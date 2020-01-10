@@ -235,7 +235,7 @@ mul bx
 add [v_s2 + 2], ax
 adc [v_s2 + 4], dx
 
-mov ax, [v_s1+2]
+mov ax, [v_s1]
 mul cx
 add [v_s2+2], ax
 adc [v_s2+4], dx
