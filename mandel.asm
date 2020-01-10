@@ -28,6 +28,7 @@
 ; /* Now use 'iteration' variable as color */
 
 cpu 8086            ; NASM warns us of non-8086 instructions
+
 org 0x0100          ; Start of code
 
 ; working in VGA 320x200x256 colors
