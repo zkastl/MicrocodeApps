@@ -138,28 +138,6 @@ mov [v_y + 2], dx
 pop dx          ; restore value from stack
 pop ax
 
-mov ax, [v_x]   ; get x
-mov dx, [v_x + 2]
-mov bx, [v_y]   ; get y
-mov cx, [v_y + 2]
-call mul32      ; multiply (x*y)
-
-shl ax, 1
-rcl dx, 1
-
-add ax, [v_a]   ; add y coordinate
-adc dx, 0
-add ax, [v_a]   ; add y coordinate
-adc dx, 0
-sub ax, 250
-sbb dx, 0
-
- mov [v_y], ax  ; save as new y -value
- mov [v_y + 2], dx
-
- pop dx         ; restore value from stack
- pop ax
-
  mov [v_x], ax  ; save as new x value
  mov [v_x + 2], dx
 

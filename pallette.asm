@@ -1,7 +1,7 @@
 ; Show VGA palette (oscar toledo g.)
 
 cpu 8086
-org 0x0100
+org 0x7c00
 
 ; memory screen uses 64000 pixels
 ; this means that 0xfa00 is the first byte
@@ -9,6 +9,7 @@ org 0x0100
 
 v_a: equ 0xfa00
 v_b: equ 0xfa02
+
 start:
     mov ax, 0x0013      ; set mode 320x200x256
     int 0x10            ; video interruption vector
@@ -16,12 +17,15 @@ start:
     mov ax, 0xa000      ; 0xa000 video segment
     mov ds, ax          ; setup data segment
     mov es, ax          ; setup extended segment
+
 m4:
     mov ax, 127         ; 127 as row
     mov [v_a], ax       ; save into v_a
+
 m0:
     mov ax, 127         ; 127 as column
     mov [v_b], ax
+
 m1:
     mov ax,[v_a]        ; get y-coordinate
     mov dx, 320         ; multiply by 320 (size of pixel row)
@@ -52,4 +56,7 @@ m1:
     mov ax, 0x0002      ; set mode 80x25 text
     int 0x10            ; video interruption vector
 
-    int 0x20            ; exit to command line
+data:
+    times 509-($-$$) db 0x21
+    db 0x00,0x55,0xaa
+    ; int 0x20            ; exit to command line
